@@ -18,4 +18,14 @@ public class UserController {
     public List<User> getAll(){
         return mongoTemplate.findAll(User.class);
     }
+
+    @RequestMapping("/add")
+    public String insertOne(){
+        User user=new User();
+        user.setUserid(4);
+        user.setName("yunhakjin");
+        user.setAge(25);
+        mongoTemplate.save(user,"user");
+        return "success";
+    }
 }
