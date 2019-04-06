@@ -2,8 +2,11 @@ package com.springboot.information.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 @Document(collection="user")
-public class User {
+public class User implements Serializable{
+    private static final long serialVersionUID = -3258839839160856613L;
     private int userid;
     private String name;
     private int age;
