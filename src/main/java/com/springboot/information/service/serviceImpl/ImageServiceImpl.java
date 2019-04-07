@@ -1,5 +1,6 @@
 package com.springboot.information.service.serviceImpl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.information.entity.Image;
 import com.springboot.information.entity.ImageOutPut;
 import com.springboot.information.entity.Twitter;
@@ -38,7 +39,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<Image> getImage() {
-        String path="E:\\Time时空数据资料\\shiro\\20190318\\北京项目\\inputPic";
+        String path="/home/hzhao/IdeaProjects/inputPic";
         File file = new File(path);
         File[] files=file.listFiles();
         List<Image> wjList = new ArrayList<Image>();//新建一个文件集合
@@ -64,31 +65,19 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<ImageOutPut> getImageOutput() {
-        String path="E:\\Time时空数据资料\\shiro\\20190318\\北京项目\\outputPic";
+        String path="/home/hzhao/IdeaProjects/outputPic";
         File file = new File(path);
         File[] files=file.listFiles();
         List<ImageOutPut> wjList = new ArrayList<ImageOutPut>();//新建一个文件集合
         for (int i = 0; i < files.length; i++) {
             if (files[i].isFile()) {//判断是否为文件
                 //直接通过json存入MongoDB
-                System.out.println(txt2String(files[i]));
-                String regex = "\\{([^}]*)\\}";
-                Pattern pattern = Pattern.compile (regex);
-                Matcher matcher = pattern.matcher (txt2String(files[i]));
-                while (matcher.find ())
-                {
-                    System.out.println (matcher.group ());
-                    System.out.println("matcher.group(j)"+matcher.group(0));
-                    System.out.println(matcher.group().length());
-                    for(int j= 0;i< matcher.group ().length();j++){
-                        //Document document = Document.parse(matcher.group(j));
-//                        JSONArray jsonObj = JSONObjec(matcher.group(j));
-//                        Document document = Document.parse(jsonObj);
-//                        JSONObject jsonObj = (JSONObject)(new JSONParser().parse(str));
-//                        System.out.println(jsonObj.toJSONString() + "\n" + jsonObj.getClass());
-//                        mongoTemplate.insert(matcher.group(j),"imageoutput");//匹配问题
-                    }
-                }
+                System.out.println(files.length);
+                Document document = Document.parse(txt2String(files[i]));
+                mongoTemplate.insert(document,"imageoutput");
+
+
+
             }
         }
         return wjList;
@@ -120,4 +109,6 @@ public class ImageServiceImpl implements ImageService {
         }
         return result.toString();
     }
+
+
 }

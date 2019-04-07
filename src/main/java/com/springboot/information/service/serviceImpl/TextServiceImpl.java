@@ -51,7 +51,7 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public List<Twitter> getTwitter() {
-        String path="E:\\Time时空数据资料\\shiro\\20190318\\北京项目\\inputText";
+        String path="/home/hzhao/IdeaProjects/inputText";
         File file = new File(path);
         File[] files=file.listFiles();
         List<Twitter> wjList = new ArrayList<Twitter>();//新建一个文件集合
@@ -67,7 +67,7 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public List<Text> getText() {
-        String path="E:\\Time时空数据资料\\shiro\\20190318\\北京项目\\outputText";
+        String path="/home/hzhao/IdeaProjects/outputText";
         File file = new File(path);
         File[] files=file.listFiles();
         List<Text> wjList = new ArrayList<Text>();//新建一个文件集合
