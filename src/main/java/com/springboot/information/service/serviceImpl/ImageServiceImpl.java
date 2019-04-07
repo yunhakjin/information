@@ -58,7 +58,7 @@ public class ImageServiceImpl implements ImageService {
                 //twitter.setContext(txt2String(files[i]));
                 wjList.add(image);
                 try {
-                    storeToGridFs(files[i],System.currentTimeMillis()+files[i].getName());
+                    storeToGridFs(files[i],files[i].getName());
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
