@@ -6,9 +6,14 @@ package com.springboot.information.controller;
 import com.springboot.information.entity.Text;
 import com.springboot.information.entity.Twitter;
 import com.springboot.information.service.TextService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -16,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/text")
+@Api("事件类相关api")
 public class TextController {
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -28,29 +34,50 @@ public class TextController {
 //        return mongoTemplate.findAll(Text.class);
 //    }
 
-    @RequestMapping("/listText")
+    @ApiOperation(value = "listALL",notes = "listALL")
+    @ApiImplicitParam(name = "params",value="",dataType = "JSON")
+    @RequestMapping(value = "/listText",method = RequestMethod.GET)
     public List<Text> getAll(){
         return textService.findAll();
     }
 
-    @RequestMapping("/getTwitter")
+
+    @ApiOperation(value = "推特获取",notes = "推特获取")
+    @ApiImplicitParam(name = "params",value="",dataType = "JSON")
+    @RequestMapping(value = "/getTwitter",method = RequestMethod.GET)
     public List<Twitter> getTwitter(){
         System.out.println(textService.getTwitter());
         return textService.getTwitter();
     }
-    @RequestMapping("/getText")
+
+
+    @ApiOperation(value = "文本获取",notes = "文本获取")
+    @ApiImplicitParam(name = "params",value="",dataType = "JSON")
+    @RequestMapping(value = "/getText",method = RequestMethod.GET)
     public List<Text> getText(){
         return textService.getText();
     }
 
-    @RequestMapping("/getTimeAndLocation")
+    @ApiOperation(value = "时间和地点",notes = "时间和地点")
+    @ApiImplicitParam(name = "params",value="",dataType = "JSON")
+    @RequestMapping(value = "/getTimeAndLocation",method = RequestMethod.GET)
     public List<Map> getTimeAndLocation(){
         return textService.getTimeAndLocation();
     }
 
-    @RequestMapping("/getTwitterListFromGridFS")
+    @ApiOperation(value = "从gridfs中获取",notes = "从gridfs中获取")
+    @RequestMapping(value = "/getTwitterListFromGridFS",method = RequestMethod.GET)
     public List<Twitter> getTwitterListFromGridFS(){
         return textService.getTwitterListFromGridFS();
     }
+
+
+    @ApiOperation(value = "事件获取",notes = "事件获取")
+    @ApiImplicitParam(name = "params",value="事件和地点",dataType = "JSON")
+    @RequestMapping(value = "/getTextAndImageJson",method = RequestMethod.POST)
+    public Map getTextAndImageJson(@RequestBody Map<String,Object> params){
+        return textService.getTextAndImageJson(params);
+    }
+
 
 }

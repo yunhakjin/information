@@ -1,10 +1,14 @@
 package com.springboot.information.service.serviceImpl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSDownloadStream;
+import com.mongodb.client.gridfs.model.GridFSFile;
 import com.springboot.information.entity.Image;
 import com.springboot.information.entity.ImageOutPut;
 import com.springboot.information.entity.Twitter;
 import com.springboot.information.service.ImageService;
+import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.json.JSONParser;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -13,6 +17,9 @@ import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
 
@@ -36,10 +43,9 @@ public class ImageServiceImpl implements ImageService {
     GridFsTemplate gridFsTemplate;
 
 
-
     @Override
     public List<Image> getImage() {
-        String path="/home/hzhao/IdeaProjects/inputPic";
+        String path="/home/hzhao/IdeaProjects/outTestpic";
         File file = new File(path);
         File[] files=file.listFiles();
         List<Image> wjList = new ArrayList<Image>();//新建一个文件集合
@@ -65,7 +71,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<ImageOutPut> getImageOutput() {
-        String path="/home/hzhao/IdeaProjects/outputPic";
+        String path="/home/hzhao/IdeaProjects/outputImageseq";
         File file = new File(path);
         File[] files=file.listFiles();
         List<ImageOutPut> wjList = new ArrayList<ImageOutPut>();//新建一个文件集合
@@ -109,6 +115,11 @@ public class ImageServiceImpl implements ImageService {
         }
         return result.toString();
     }
+
+
+
+
+
 
 
 }

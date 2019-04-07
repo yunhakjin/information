@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by yww on 2019/3/29.
@@ -11,25 +12,25 @@ import java.util.ArrayList;
 @Document(collection="text")
 public class Text implements Serializable {
     private static final long serialVersionUID = -3258839839160856613L;
-    private String textID;
-    private Object summary;
+    private String _id;
+    private Map summary;
     private ArrayList<Object> geo_infer;
-    private Object time_infer;
+    private Map time_infer;
     private ArrayList<Object> tweet_list;
 
     public String getTextID() {
-        return textID;
+        return _id;
     }
 
-    public void setTextID(String textID) {
-        this.textID = textID;
+    public void setTextID(String _id) {
+        this._id = _id;
     }
 
-    public Object getSummary() {
+    public Map getSummary() {
         return summary;
     }
 
-    public void setSummary(Object summary) {
+    public void setSummary(Map summary) {
         this.summary = summary;
     }
 
@@ -49,18 +50,18 @@ public class Text implements Serializable {
         this.tweet_list = tweet_list;
     }
 
-    public Object getTime_infer() {
+    public Map getTime_infer() {
         return time_infer;
     }
 
-    public void setTime_infer(Object time_infer) {
+    public void setTime_infer(Map time_infer) {
         this.time_infer = time_infer;
     }
 
     @Override
     public String toString() {
         return "Text{" +
-                "textID=" + textID +
+                "_id=" + _id +
                 ", summary=" + summary +
                 ", geo_infer=" + geo_infer +
                 ", time_infer=" + time_infer +

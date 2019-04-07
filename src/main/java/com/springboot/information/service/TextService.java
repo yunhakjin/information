@@ -24,4 +24,6 @@ public interface TextService {
     List<Map> getTimeAndLocation();
 
     List<Twitter> getTwitterListFromGridFS();
+
+    Map getTextAndImageJson(Map params);
 }
