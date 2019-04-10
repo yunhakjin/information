@@ -71,7 +71,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<ImageOutPut> getImageOutput() {
-        String path="/home/hzhao/IdeaProjects/outputImageseq";
+        String path="/home/hzhao/IdeaProjects/outputPic";
         File file = new File(path);
         File[] files=file.listFiles();
         List<ImageOutPut> wjList = new ArrayList<ImageOutPut>();//新建一个文件集合

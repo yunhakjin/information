@@ -145,42 +145,37 @@ public class TextServiceImpl implements TextService {
                         List<Double> down = (List) Bbox.get("southwest");
                         System.out.println(up);
                         System.out.println(down);
-                        Double up_lon = 0.0;
-                        Double up_lat = 0.0;
-                        Double down_lon = 0.0;
-                        Double down_lat = 0.0;
+                        Double up_lon2 = 0.0;
+                        Double up_lat2 = 0.0;
+                        Double down_lon1 = 0.0;
+                        Double down_lat1 = 0.0;
 
                         for(int m = 0; m<up.size();m++){
                             if(m==0){
-                                up_lon = (Double) up.get(m);
+                                up_lat2 = (Double) up.get(m);
                             }else{
-                                up_lat = (Double) up.get(m);
+                                up_lon2= (Double) up.get(m);
                             }
                         }
                         for(int n = 0; n<down.size();n++){
                             if(n==0){
-                                down_lon = (Double) down.get(n);
+                                down_lat1 = (Double) down.get(n);
                             }else{
-                                down_lat = (Double) down.get(n);
+                                down_lon1 = (Double) down.get(n);
                             }
                         }
-                        System.out.println(up_lon+",  "+up_lat+" ,"+down_lon+" ,"+down_lat);
                         List<Double> P1 = new ArrayList<>();
                         List<Double> P2 = new ArrayList<>();
                         List<Double> P3 = new ArrayList<>();
                         List<Double> P4 = new ArrayList<>();
-                        P1.add(up_lon);
-                        P1.add(up_lat);
-                        System.out.println("P1"+P1);
-                        P2.add(up_lon);
-                        P2.add(down_lat);
-                        System.out.println("P2"+P2);
-                        P3.add(down_lon);
-                        P3.add(down_lat);
-                        System.out.println("P3"+P3);
-                        P4.add(down_lon);
-                        P4.add(up_lat);
-                        System.out.println("P4"+P4);
+                        P1.add(down_lon1);
+                        P1.add(up_lat2);
+                        P2.add(up_lon2);
+                        P2.add(up_lat2);
+                        P3.add(up_lon2);
+                        P3.add(down_lat1);
+                        P4.add(down_lon1);
+                        P4.add(down_lat1);
 
                         box.add(P1);
                         box.add(P2);
