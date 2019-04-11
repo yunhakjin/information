@@ -26,4 +26,6 @@ public interface TextService {
     List<Twitter> getTwitterListFromGridFS();
 
     Map getTextAndImageJson(Map params);
+
+    Map getAllEvents();
 }

@@ -80,4 +80,11 @@ public class TextController {
     }
 
 
+    @ApiOperation(value = "所有事件获取",notes = "所有事件获取")
+    @RequestMapping(value = "/getAllEvents",method = RequestMethod.GET)
+    public Map getAllEvents(){
+        return textService.getAllEvents();
+    }
+
+
 }

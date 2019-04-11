@@ -143,8 +143,8 @@ public class TextServiceImpl implements TextService {
                         //System.out.println("bbox"+Bbox);
                         List<Double> up = (List) Bbox.get("northeast");
                         List<Double> down = (List) Bbox.get("southwest");
-                        System.out.println(up);
-                        System.out.println(down);
+                        //System.out.println(up);
+                        //System.out.println(down);
                         Double up_lon2 = 0.0;
                         Double up_lat2 = 0.0;
                         Double down_lon1 = 0.0;
@@ -229,7 +229,6 @@ public class TextServiceImpl implements TextService {
                 Map<String,Object> mapContent = new HashMap<>();
                 mapContent.put("time",date);
                 mapContent.put("location",target);
-                //System.out.println((List)texts.get(i).getSummary().get("keywords"));
                 List<String> keywordList = (List)texts.get(i).getSummary().get("keywords");
                 mapContent.put("keyword",keywordList);
                 map.put("content",mapContent);
@@ -240,6 +239,25 @@ public class TextServiceImpl implements TextService {
 
         resultMap.put("events_count",event.size());
         resultMap.put("event",event);
+        return resultMap;
+    }
+
+    @Override
+    public Map getAllEvents() {
+        Map<String,Object> resultMap=new LinkedHashMap<String,Object>();
+        List<Map> events = new ArrayList<>();
+        //获取所有事件，事件的length，遍历所有事件，包装event
+        List<Text> texts=mongoTemplate.findAll(Text.class);
+        for(int i =0;i<texts.size();i++){
+            Map event = new HashMap();
+            event.put("event_id",texts.get(i).getTextID());
+            event.put("event_level",texts.get(i).getSummary().get("level"));
+            event.put("most_possible_time",texts.get(i).getTime_infer().get("most_possible_time"));
+            List<String> keywordList = (List)texts.get(i).getSummary().get("keywords");
+            event.put("keywords",keywordList);
+            events.add(event);
+        }
+        resultMap.put("event",events);
         return resultMap;
     }
 
