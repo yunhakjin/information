@@ -28,4 +28,6 @@ public interface TextService {
     Map getTextAndImageJson(Map params);
 
     Map getAllEvents();
+
+    Map getEventsByID(Map params);
 }

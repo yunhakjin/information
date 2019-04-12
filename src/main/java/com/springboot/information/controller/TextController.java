@@ -87,4 +87,13 @@ public class TextController {
     }
 
 
+
+
+    @ApiOperation(value = "单个事件获取",notes = "单个事件获取")
+    @ApiImplicitParam(name = "params",value="事件id",dataType = "JSON")
+    @RequestMapping(value = "/getEventsByID",method = RequestMethod.POST)
+    public Map getEventsByID(@RequestBody Map<String,Object> params){
+        return textService.getEventsByID(params);
+    }
+
 }
