@@ -457,8 +457,6 @@ public class TextServiceImpl implements TextService {
 
 
 
-
-
     @Test
     public List<String> readFilesFromGridFs() {
         GridFsResource[] imagefiles = gridFsTemplate.getResources("*");
