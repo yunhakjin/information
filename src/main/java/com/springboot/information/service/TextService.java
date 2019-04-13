@@ -33,5 +33,5 @@ public interface TextService {
 
     Map getEventsByID(Map params);
 
-    void download(Map<String, Object> id, HttpServletRequest request, HttpServletResponse response);
+    void download(String id, HttpServletRequest request, HttpServletResponse response);
 }

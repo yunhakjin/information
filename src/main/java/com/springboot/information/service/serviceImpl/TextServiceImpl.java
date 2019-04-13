@@ -271,6 +271,7 @@ public class TextServiceImpl implements TextService {
     @Override
     public Map getEventsByID(Map params) {
         String id=(String)params.get("id");
+        System.out.println(id);
         Map<String,Object> resultMap=new LinkedHashMap<String,Object>();
         Text text = mongoTemplate.findById(id,Text.class,"text");
         //返回一个Bbox的list；
@@ -368,14 +369,11 @@ public class TextServiceImpl implements TextService {
                 if(j>=9)
                     break;
             }
-            if(resultss.size()>10){
-                //存储到本地文件 json格式 JSONArray
-                creatFile(id,resultss);
-                resultMap.put("urlFlag","http://:8080/information/"+id+".txt");
+            //存储到本地文件 json格式 JSONArray
+            creatFile(id,resultss);
+            resultMap.put("urlFlag","http://localhost:8080/information/text/download/"+id+".txt");
 
-            }else{
-                resultMap.put("urlFlag",null);
-            }
+
 
         }else {
             System.out.println("此事件的geoList的size为0！");
@@ -386,8 +384,8 @@ public class TextServiceImpl implements TextService {
     }
 
     @Override
-    public void download(Map<String, Object> params, HttpServletRequest request, HttpServletResponse response) {
-        String id=(String)params.get("id");
+    public void download(String id, HttpServletRequest request, HttpServletResponse response) {
+        //String id=(String)params.get("id");
         File file = new File("/home/hzhao/IdeaProjects/information/src/main/resources/public/", id + ".txt");
         try(InputStream inputStream =  new FileInputStream(file);
             OutputStream outputStream = response.getOutputStream();){

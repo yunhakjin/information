@@ -101,12 +101,12 @@ public class TextController {
     }
 
     @ApiOperation(value = "download",notes = "download")
-    @ApiImplicitParam(name = "params",value="事件id",dataType = "JSON")
-    //@GetMapping("/download/{id}")
-    @RequestMapping(value = "/download",method = RequestMethod.POST)
-    public void download(@RequestBody Map<String,Object> params, HttpServletRequest request, HttpServletResponse response) {
+    //@ApiImplicitParam(name = "params",value="事件id",dataType = "JSON")
+    @GetMapping("/download/{id}")
+    //@RequestMapping(value = "/download",method = RequestMethod.GET)
+    public void download(@PathVariable String id, HttpServletRequest request, HttpServletResponse response) {
 
-        textService.download(params,request, response);
+        textService.download(id,request, response);
 
     }
 
