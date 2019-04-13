@@ -3,6 +3,8 @@ package com.springboot.information.service;
 import com.springboot.information.entity.Text;
 import com.springboot.information.entity.Twitter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -30,4 +32,6 @@ public interface TextService {
     Map getAllEvents();
 
     Map getEventsByID(Map params);
+
+    void download(Map<String, Object> id, HttpServletRequest request, HttpServletResponse response);
 }

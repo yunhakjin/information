@@ -82,8 +82,6 @@ public class ImageServiceImpl implements ImageService {
                 Document document = Document.parse(txt2String(files[i]));
                 mongoTemplate.insert(document,"imageoutput");
 
-
-
             }
         }
         return wjList;

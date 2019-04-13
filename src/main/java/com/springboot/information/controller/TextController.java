@@ -9,13 +9,17 @@ import com.springboot.information.service.TextService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -94,6 +98,16 @@ public class TextController {
     @RequestMapping(value = "/getEventsByID",method = RequestMethod.POST)
     public Map getEventsByID(@RequestBody Map<String,Object> params){
         return textService.getEventsByID(params);
+    }
+
+    @ApiOperation(value = "download",notes = "download")
+    @ApiImplicitParam(name = "params",value="事件id",dataType = "JSON")
+    //@GetMapping("/download/{id}")
+    @RequestMapping(value = "/download",method = RequestMethod.POST)
+    public void download(@RequestBody Map<String,Object> params, HttpServletRequest request, HttpServletResponse response) {
+
+        textService.download(params,request, response);
+
     }
 
 }

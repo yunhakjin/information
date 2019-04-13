@@ -1,45 +1,39 @@
 package com.springboot.information.service.serviceImpl;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.gridfs.GridFSBucket;
-import com.mongodb.client.gridfs.GridFSDownloadStream;
-import com.mongodb.client.gridfs.model.GridFSFile;
-import com.mongodb.gridfs.GridFS;
-import com.mongodb.gridfs.GridFSDBFile;
-import com.mongodb.gridfs.GridFSInputFile;
-import com.mongodb.util.JSON;
+//import com.mongodb.util.JSON;
 import com.springboot.information.entity.Text;
 import com.springboot.information.entity.Twitter;
-import com.springboot.information.entity.tweet_list;
 import com.springboot.information.service.TextService;
+
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import org.apache.commons.io.IOUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.codehaus.jettison.json.JSONObject;
+//import org.codehaus.jettison.json.JSONArray;
+//import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.print.Doc;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.*;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 
@@ -57,6 +51,8 @@ public class TextServiceImpl implements TextService {
     @Autowired
     private MongoDbFactory mongodbfactory;
 
+    @Autowired
+    ApplicationContext applicationContext;
 
     GridFSBucket gridFSBucket;
 
@@ -354,53 +350,71 @@ public class TextServiceImpl implements TextService {
 
             );
             AggregationResults<JSONObject> results = mongoTemplate.aggregate(agg, "text", JSONObject.class);
-            System.out.println("results"+results.getRawResults()); //获取到的结果是document
-            List<JSONObject> mappedResults = results.getMappedResults();
-            System.out.println("mappedResults:"+mappedResults);
-
-            if(text.getTweet_list().size()<10){
-                //list 所有的tweet按照顺序
+            //System.out.println("results"+results.getRawResults()); //获取到的结果是document
+            //String res = results.getRawResults();
+            String json = com.mongodb.util.JSON.serialize(results.getRawResults());
+            System.out.println("JSON serialized Document: " + json);
+            JSONObject jso= JSON.parseObject(json);
+            JSONArray resultss=jso.getJSONArray("results");
+            System.out.println(resultss);
+            for(int j = 0;j<resultss.size();j++){
+                Map tweet_one = (Map) resultss.get(j);
+                Map map=new HashMap();
+                map.put("_id",id);
+                map.put("timestamp_ms",tweet_one.get("timestamp_ms"));
+                map.put("text",tweet_one.get("text"));
+                map.put("created_at",tweet_one.get("created_at"));
+                tweets.add(map);
+                if(j>=9)
+                    break;
+            }
+            if(resultss.size()>10){
+                //存储到本地文件 json格式 JSONArray
+                creatFile(id,resultss);
+                resultMap.put("urlFlag","http://:8080/information/"+id+".txt");
 
             }else{
-                //list前十条，按照时间的先后顺序。
+                resultMap.put("urlFlag",null);
             }
 
-            //对获得的推特列表存入文本
-            for (int i = 0;i<tweetList.size();i++){
-
-//                creatFile(id);
-//
-//
-//                try{
-//                    BufferedWriter writer = new BufferedWriter(new FileWriter(new File(""),true));
-//                    writer.write("\n"+"");
-//                    writer.close();
-//                }catch(Exception e){
-//                    e.printStackTrace();
-//                }
-
-            }
         }else {
             System.out.println("此事件的geoList的size为0！");
         }
+        resultMap.put("tweets_list",tweets);
         resultMap.put("bboxs",bboxs);
         return resultMap;
     }
 
-    private void creatFile(String id) {
+    @Override
+    public void download(Map<String, Object> params, HttpServletRequest request, HttpServletResponse response) {
+        String id=(String)params.get("id");
+        File file = new File("/home/hzhao/IdeaProjects/information/src/main/resources/public/", id + ".txt");
+        try(InputStream inputStream =  new FileInputStream(file);
+            OutputStream outputStream = response.getOutputStream();){
+            response.setContentType("application/x-download");
+            response.addHeader("Content-Disposition", "attachment;filename="+id+".txt");
+            IOUtils.copy(inputStream, outputStream);
+            outputStream.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    private void creatFile(String id, JSONArray resultss) {
         //创建一个文件，名字就是id；
-        String filePath = "/home/hzhao/IdeaProjects/tweetList";
+        String filePath = "./src/main/resources/public/";
         File dir = new File(filePath); // 一、检查放置文件的文件夹路径是否存在，不存在则创建
         if (!dir.exists()) {
             dir.mkdirs();// mkdirs创建多级目录
         }
-        File checkFile = new File(filePath + "/"+id+".txt");
+        File checkFile = new File(filePath + id+".txt");
         FileWriter writer = null; try { // 二、检查目标文件是否存在，不存在则创建
             if (!checkFile.exists()) {
                 checkFile.createNewFile();// 创建目标文件
             } // 三、向目标文件中写入内容 //
             writer = new FileWriter(checkFile, true);
-            writer.append("your content");
+            writer.append(resultss+"");
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
