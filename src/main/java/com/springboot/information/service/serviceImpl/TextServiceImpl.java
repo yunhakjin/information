@@ -411,8 +411,8 @@ public class TextServiceImpl implements TextService {
             if (!checkFile.exists()) {
                 checkFile.createNewFile();// 创建目标文件
             } // 三、向目标文件中写入内容 //
-            writer = new FileWriter(checkFile, true);
-            writer.append(resultss+"");
+            writer = new FileWriter(checkFile, false);
+            writer.write("{\"key\":"+resultss+"}");
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
