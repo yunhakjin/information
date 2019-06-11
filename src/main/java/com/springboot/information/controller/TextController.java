@@ -46,7 +46,7 @@ public class TextController {
     }
 
 
-    @ApiOperation(value = "推特获取",notes = "推特获取")
+   /* @ApiOperation(value = "推特获取",notes = "推特获取")
     @ApiImplicitParam(name = "params",value="",dataType = "JSON")
     @RequestMapping(value = "/getTwitter",method = RequestMethod.GET)
     public List<Twitter> getTwitter(){
@@ -60,7 +60,7 @@ public class TextController {
     @RequestMapping(value = "/getText",method = RequestMethod.GET)
     public List<Text> getText(){
         return textService.getText();
-    }
+    }*/
 
     @ApiOperation(value = "时间和地点",notes = "时间和地点")
     @ApiImplicitParam(name = "params",value="",dataType = "JSON")

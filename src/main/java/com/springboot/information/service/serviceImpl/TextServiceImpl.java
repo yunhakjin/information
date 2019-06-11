@@ -277,6 +277,7 @@ public class TextServiceImpl implements TextService {
         //返回一个Bbox的list；
         List<Object> GeoList = (List) text.getGeo_infer();
         List<Map> bboxs = new ArrayList<>();
+        List<Object> airport = new ArrayList<>();
 
         if(text.getGeo_infer().size()!=0){
             for (int j = 0; j < GeoList.size();j++){
@@ -378,8 +379,27 @@ public class TextServiceImpl implements TextService {
         }else {
             System.out.println("此事件的geoList的size为0！");
         }
+
+        //airport
+        Map airportName = new HashMap();
+        airportName.put("airport",text.getSummary().get("airport"));
+        airport.add(airportName);
+        //getPic();
+        List<Map> picName = new ArrayList<Map>();
+        List<Map> picList= (List)text.getSummary().get("picname");
+        if(picList!=null){
+            System.out.println(picList.size());
+            for(int t = 0;t<picList.size();t++){
+                System.out.println(picList.get(t));
+                picName.add(picList.get(t));
+            }
+
+        }
+        airport.add(picName);
         resultMap.put("tweets_list",tweets);
         resultMap.put("bboxs",bboxs);
+        resultMap.put("airport",airport);
+
         return resultMap;
     }
 
@@ -426,6 +446,9 @@ public class TextServiceImpl implements TextService {
             }
         }
     }
+
+
+
 
 
     public static String txt2String(File file){
