@@ -385,11 +385,7 @@ public class TextServiceImpl implements TextService {
         airportName.put("airport",text.getSummary().get("airport"));
         airport.add(airportName);
 
-        //getairportaddr
-        Map airportaddr = new HashMap();
-        List<Map> addrlonandlat= (List)text.getSummary().get("airportaddr");
-        airportaddr.put("airportaddr",addrlonandlat);
-        airport.add(airportaddr);
+
 
         //getPic();
         List<Map> picName = new ArrayList<Map>();
@@ -403,6 +399,17 @@ public class TextServiceImpl implements TextService {
 
         }
         airport.add(picName);
+
+        //getairportaddr
+        Map airportaddr = new HashMap();
+        List<Map> addrlonandlat= (List)text.getSummary().get("airportaddr");
+        List<Map> addrlonandlatres = new ArrayList<Map>();
+        addrlonandlatres.add(addrlonandlat.get(1));
+        addrlonandlatres.add(addrlonandlat.get(0));
+        airportaddr.put("airportaddr",addrlonandlatres);
+        airport.add(airportaddr);
+
+
         resultMap.put("tweets_list",tweets);
         resultMap.put("bboxs",bboxs);
         resultMap.put("airport",airport);
