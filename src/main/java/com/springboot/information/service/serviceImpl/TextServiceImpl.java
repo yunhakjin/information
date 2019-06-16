@@ -1,5 +1,10 @@
 package com.springboot.information.service.serviceImpl;
 
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.python.util.PythonInterpreter;
 import com.mongodb.client.gridfs.GridFSBucket;
 //import com.mongodb.util.JSON;
 import com.springboot.information.entity.Text;
@@ -11,6 +16,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import com.springboot.information.utils.StreamGobbler;
 import org.apache.commons.io.IOUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -32,7 +38,10 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.Session;
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
@@ -430,6 +439,155 @@ public class TextServiceImpl implements TextService {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void runmodels() {
+        //String shpath = "/home/hzhao/project_bj";
+        String url="http://59.78.194.14:10010/test";
+        String result = "";
+        try{
+            URL realUrl = new URL(url);
+            //打开和URL之间的连接
+            URLConnection conn =  realUrl.openConnection();
+            //设置通用的请求属性
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            //发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            //获取URLConnection对象对应的输出流
+            PrintWriter out = new PrintWriter(conn.getOutputStream());
+            //flush输出流的缓冲
+            out.flush();
+            // 定义 BufferedReader输入流来读取URL的响应
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += "\n" + line;
+            }
+        } catch (Exception e) {
+            System.out.println("发送POST请求出现异常" + e);
+            e.printStackTrace();
+        }finally {
+            System.out.println(result);
+        }
+        System.out.println(result);
+
+    }
+
+    @Override
+    public void runPicmodels() {
+
+       try {
+            String shpath = "/home/hzhao/project_bj";
+            //String[] envp = new String[] {"path=D:\\Anaconda3\\envs\\leantwo"};
+//            String[] envp = new String[] {"path = /home/hzhao/anaconda3/envs/zh_py35/bin/python"};
+//            Process ps = Runtime.getRuntime().exec("./plane.sh",envp,new File(shpath));
+
+           String[] params = new String[] { "/home/hzhao/anaconda3/envs/zh_py35/bin/python", "/home/hzhao/project_bj/detection_pub/__main__.pyc"};
+           Process ps=Runtime.getRuntime().exec(params);
+           ps.waitFor();
+
+           BufferedReader bufrIn = new BufferedReader(new InputStreamReader(ps.getInputStream(), "UTF-8"));
+           BufferedReader bufrError = new BufferedReader(new InputStreamReader(ps.getErrorStream(), "UTF-8"));
+
+            // 读取输出
+           StringBuilder result = new StringBuilder();
+           String line = null;
+           while ((line = bufrIn.readLine()) != null || (line = bufrError.readLine()) != null) {
+               result.append(line).append('\n');
+           }
+
+           System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+//        try {
+//            String shpath = "/home/hzhao/project_bj/plane.sh";
+//
+////            String  str = "source activate zh_py35"
+//
+//            String[]  cmds = { "source activate zh_py35","echo ------running-------","pwd","cd /", "pwd" };
+//
+//
+//            for (String cmd : cmds) {
+//                Process ps = Runtime.getRuntime().exec(cmd);
+//                ps.waitFor();
+//                print(ps);
+//            }
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    @Override
+    public void runEventmodels() {
+        //String[] cmdarray = new String[] { "cmd", "/c", "python D:\\python2\\test.py"};
+        //String[] envp = new String[] {"path=D:\\Anaconda3\\envs\\leantwo"};
+        String shpath = "/home/hzhao/project_bj";
+        //String[] envp = new String[] {"path=D:\\Anaconda3\\envs\\leantwo"};
+//            String[] envp = new String[] {"path = /home/hzhao/anaconda3/envs/zh_py35/bin/python"};
+//            Process ps = Runtime.getRuntime().exec("./plane.sh",envp,new File(shpath));
+        //PATH="$PATH:/usr/local/bin/python"
+                ///home/hzhao/anaconda3/envs/zh_py35/bin/python
+        //String[] cmdarray = new String[] { "cd /home/hzhao;source activate zh_py35"};
+//        String[] envp = new String[] {"PATH=\"$PATH:/home/hzhao/anaconda3/envs/zh_py35\""};
+//        try {
+//            //Process process = Runtime.getRuntime().exec("./plane.sh",null,new File(shpath));
+//            Process process=Runtime.getRuntime().exec(new String[] {"sh", "/home/hzhao/project_bj/plane.sh"});
+//            BufferedReader in = new BufferedReader( new InputStreamReader(process.getInputStream()));
+//            String line = null;
+//            while ((line = in.readLine()) != null) {
+//                System.out.println(line);
+//            } in.close();
+//            int re = process.waitFor();
+//            System.out.println(re);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        String url="http://59.78.194.66:10010/test";
+        String result = "";
+        try{
+            URL realUrl = new URL(url);
+            //打开和URL之间的连接
+            URLConnection conn =  realUrl.openConnection();
+            //设置通用的请求属性
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            //发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            //获取URLConnection对象对应的输出流
+            PrintWriter out = new PrintWriter(conn.getOutputStream());
+            //flush输出流的缓冲
+            out.flush();
+            // 定义 BufferedReader输入流来读取URL的响应
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += "\n" + line;
+            }
+        } catch (Exception e) {
+            System.out.println("发送POST请求出现异常" + e);
+            e.printStackTrace();
+        }finally {
+            System.out.println(result);
+        }
+        System.out.println(result);
+
     }
 
 

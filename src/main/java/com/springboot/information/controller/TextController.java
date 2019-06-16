@@ -92,7 +92,24 @@ public class TextController {
     }
 
 
+    @ApiOperation(value = "文本模型运行",notes = "运行模型")
+    @RequestMapping(value = "/runmodels",method = RequestMethod.GET)
+    public void runmodels(){
+         textService.runmodels();
+    }
 
+
+    @ApiOperation(value = "影像模型运行",notes = "运行模型")
+    @RequestMapping(value = "/runPicmodels",method = RequestMethod.GET)
+    public void runPicmodels(){
+        textService.runPicmodels();
+    }
+
+    @ApiOperation(value = "推特模型运行",notes = "运行模型")
+    @RequestMapping(value = "/runEventmodels",method = RequestMethod.GET)
+    public void runEventmodels(){
+        textService.runEventmodels();
+    }
 
     @ApiOperation(value = "单个事件获取",notes = "单个事件获取")
     @ApiImplicitParam(name = "params",value="事件id",dataType = "JSON")

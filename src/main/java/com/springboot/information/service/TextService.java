@@ -34,4 +34,10 @@ public interface TextService {
     Map getEventsByID(Map params);
 
     void download(String id, HttpServletRequest request, HttpServletResponse response);
+
+    void runmodels();
+
+    void runPicmodels();
+
+    void runEventmodels();
 }
