@@ -443,7 +443,6 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public void runmodels() {
-        //String shpath = "/home/hzhao/project_bj";
         String url="http://59.78.194.14:10010/test";
         String result = "";
         try{
@@ -458,6 +457,7 @@ public class TextServiceImpl implements TextService {
             //发送POST请求必须设置如下两行
             conn.setDoOutput(true);
             conn.setDoInput(true);
+
             //获取URLConnection对象对应的输出流
             PrintWriter out = new PrintWriter(conn.getOutputStream());
             //flush输出流的缓冲
@@ -468,6 +468,8 @@ public class TextServiceImpl implements TextService {
             while ((line = in.readLine()) != null) {
                 result += "\n" + line;
             }
+            creatFiletowenben(""+new Date().getTime(),result);
+
         } catch (Exception e) {
             System.out.println("发送POST请求出现异常" + e);
             e.printStackTrace();
@@ -475,18 +477,14 @@ public class TextServiceImpl implements TextService {
             System.out.println(result);
         }
         System.out.println(result);
+        System.out.println(""+new Date().getTime());
 
     }
 
     @Override
     public void runPicmodels() {
-
        try {
             String shpath = "/home/hzhao/project_bj";
-            //String[] envp = new String[] {"path=D:\\Anaconda3\\envs\\leantwo"};
-//            String[] envp = new String[] {"path = /home/hzhao/anaconda3/envs/zh_py35/bin/python"};
-//            Process ps = Runtime.getRuntime().exec("./plane.sh",envp,new File(shpath));
-
            String[] params = new String[] { "/home/hzhao/anaconda3/envs/zh_py35/bin/python", "/home/hzhao/project_bj/detection_pub/__main__.pyc"};
            Process ps=Runtime.getRuntime().exec(params);
            ps.waitFor();
@@ -505,57 +503,12 @@ public class TextServiceImpl implements TextService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
-
-
-//        try {
-//            String shpath = "/home/hzhao/project_bj/plane.sh";
-//
-////            String  str = "source activate zh_py35"
-//
-//            String[]  cmds = { "source activate zh_py35","echo ------running-------","pwd","cd /", "pwd" };
-//
-//
-//            for (String cmd : cmds) {
-//                Process ps = Runtime.getRuntime().exec(cmd);
-//                ps.waitFor();
-//                print(ps);
-//            }
-//
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override
     public void runEventmodels() {
-        //String[] cmdarray = new String[] { "cmd", "/c", "python D:\\python2\\test.py"};
-        //String[] envp = new String[] {"path=D:\\Anaconda3\\envs\\leantwo"};
         String shpath = "/home/hzhao/project_bj";
-        //String[] envp = new String[] {"path=D:\\Anaconda3\\envs\\leantwo"};
-//            String[] envp = new String[] {"path = /home/hzhao/anaconda3/envs/zh_py35/bin/python"};
-//            Process ps = Runtime.getRuntime().exec("./plane.sh",envp,new File(shpath));
-        //PATH="$PATH:/usr/local/bin/python"
-                ///home/hzhao/anaconda3/envs/zh_py35/bin/python
-        //String[] cmdarray = new String[] { "cd /home/hzhao;source activate zh_py35"};
-//        String[] envp = new String[] {"PATH=\"$PATH:/home/hzhao/anaconda3/envs/zh_py35\""};
-//        try {
-//            //Process process = Runtime.getRuntime().exec("./plane.sh",null,new File(shpath));
-//            Process process=Runtime.getRuntime().exec(new String[] {"sh", "/home/hzhao/project_bj/plane.sh"});
-//            BufferedReader in = new BufferedReader( new InputStreamReader(process.getInputStream()));
-//            String line = null;
-//            while ((line = in.readLine()) != null) {
-//                System.out.println(line);
-//            } in.close();
-//            int re = process.waitFor();
-//            System.out.println(re);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
         String url="http://59.78.194.66:10010/test";
         String result = "";
         try{
@@ -580,6 +533,8 @@ public class TextServiceImpl implements TextService {
             while ((line = in.readLine()) != null) {
                 result += "\n" + line;
             }
+            //System.out.println(""+new Date().getTime());
+            //creatFiletowenben(""+new Date().getTime(),result);
         } catch (Exception e) {
             System.out.println("发送POST请求出现异常" + e);
             e.printStackTrace();
@@ -587,9 +542,36 @@ public class TextServiceImpl implements TextService {
             System.out.println(result);
         }
         System.out.println(result);
+        System.out.println(""+new Date().getTime());
 
     }
-
+    private void creatFiletowenben(String id, String resultss) {
+        //创建一个文件，名字就是id；
+        String filePath = "/home/hzhao/QB/output/";
+        File dir = new File(filePath); // 一、检查放置文件的文件夹路径是否存在，不存在则创建
+        if (!dir.exists()) {
+            dir.mkdirs();// mkdirs创建多级目录
+        }
+        File checkFile = new File(filePath + id+".json");
+        FileWriter writer = null; try { // 二、检查目标文件是否存在，不存在则创建
+            if (!checkFile.exists()) {
+                checkFile.createNewFile();// 创建目标文件
+            } // 三、向目标文件中写入内容 //
+            writer = new FileWriter(checkFile, false);
+            writer.write("{\"key\":"+resultss+"}");
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (null != writer) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     private void creatFile(String id, JSONArray resultss) {
         //创建一个文件，名字就是id；
@@ -619,10 +601,6 @@ public class TextServiceImpl implements TextService {
         }
     }
 
-
-
-
-
     public static String txt2String(File file){
         StringBuilder result = new StringBuilder();
         try{
@@ -649,8 +627,6 @@ public class TextServiceImpl implements TextService {
         System.out.println(file);
         System.out.println(fileId);
     }
-
-
 
     @Test
     public List<String> readFilesFromGridFs() {

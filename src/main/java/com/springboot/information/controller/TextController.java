@@ -93,16 +93,17 @@ public class TextController {
 
 
     @ApiOperation(value = "文本模型运行",notes = "运行模型")
-    @RequestMapping(value = "/runmodels",method = RequestMethod.GET)
+    @RequestMapping(value = "/runtwomodels",method = RequestMethod.GET)
     public void runmodels(){
-         textService.runmodels();
+        textService.runEventmodels();
+        textService.runmodels();
     }
 
 
     @ApiOperation(value = "影像模型运行",notes = "运行模型")
-    @RequestMapping(value = "/runPicmodels",method = RequestMethod.GET)
+    @RequestMapping(value = "/runmodels",method = RequestMethod.GET)
     public void runPicmodels(){
-        textService.runPicmodels();
+        ///textService.runPicmodels();
     }
 
     @ApiOperation(value = "推特模型运行",notes = "运行模型")
