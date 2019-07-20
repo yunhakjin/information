@@ -413,8 +413,11 @@ public class TextServiceImpl implements TextService {
         Map airportaddr = new HashMap();
         List<Map> addrlonandlat= (List)text.getSummary().get("airportaddr");
         List<Map> addrlonandlatres = new ArrayList<Map>();
-        addrlonandlatres.add(addrlonandlat.get(1));
-        addrlonandlatres.add(addrlonandlat.get(0));
+        //判空
+        if(addrlonandlat!=null||addrlonandlat.size()!=0){
+            addrlonandlatres.add(addrlonandlat.get(1));
+            addrlonandlatres.add(addrlonandlat.get(0));
+        }
         airportaddr.put("airportaddr",addrlonandlatres);
         airport.add(airportaddr);
 
@@ -443,7 +446,8 @@ public class TextServiceImpl implements TextService {
 
     @Override
     public void runmodels() {
-        String url="http://59.78.194.14:10010/test";
+        //String url="http://59.78.194.14:10010/test";
+        String url="http://127.0.0.1:10010/test";
         String result = "";
         try{
             URL realUrl = new URL(url);
@@ -468,7 +472,7 @@ public class TextServiceImpl implements TextService {
             while ((line = in.readLine()) != null) {
                 result += "\n" + line;
             }
-            creatFiletowenben(""+new Date().getTime(),result);
+            //creatFiletowenben(""+new Date().getTime(),result);
 
         } catch (Exception e) {
             System.out.println("发送POST请求出现异常" + e);
@@ -509,7 +513,7 @@ public class TextServiceImpl implements TextService {
     public void runEventmodels() {
         String shpath = "/home/hzhao/project_bj";
 
-        String url="http://59.78.194.66:10010/test";
+        String url="http://59.78.194.115:10010/test";
         String result = "";
         try{
             URL realUrl = new URL(url);
@@ -534,14 +538,14 @@ public class TextServiceImpl implements TextService {
                 result += "\n" + line;
             }
             //System.out.println(""+new Date().getTime());
-            //creatFiletowenben(""+new Date().getTime(),result);
+            creatFiletowenben(""+new Date().getTime(),result);
         } catch (Exception e) {
             System.out.println("发送POST请求出现异常" + e);
             e.printStackTrace();
         }finally {
             System.out.println(result);
         }
-        System.out.println(result);
+        System.out.println(result+"tag::");
         System.out.println(""+new Date().getTime());
 
     }
@@ -559,6 +563,7 @@ public class TextServiceImpl implements TextService {
             } // 三、向目标文件中写入内容 //
             writer = new FileWriter(checkFile, false);
             writer.write("{\"key\":"+resultss+"}");
+            System.out.println("test:"+resultss);
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
