@@ -120,6 +120,14 @@ public class TextController {
         return textService.getEventsByID(params);
     }
 
+    @ApiOperation(value = "根据ID获取参考推特",notes = "获取推特by id")
+    @ApiImplicitParam(name = "params",value="事件id",dataType = "JSON")
+    @RequestMapping(value = "/tweetAnalysis",method = RequestMethod.POST)
+    public Map tweetAnalysis(@RequestBody Map<String,Object> params){
+        return textService.tweetAnalysis(params);
+    }
+
+
     @ApiOperation(value = "download",notes = "download")
     //@ApiImplicitParam(name = "params",value="事件id",dataType = "JSON")
     @GetMapping("/download/{id}")

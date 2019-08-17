@@ -4,6 +4,7 @@ import com.mongodb.client.gridfs.GridFSBucket;
 //import com.mongodb.util.JSON;
 import com.springboot.information.entity.Text;
 import com.springboot.information.entity.Twitter;
+import com.springboot.information.entity.tweet_list;
 import com.springboot.information.service.TextService;
 
 
@@ -266,6 +267,8 @@ public class TextServiceImpl implements TextService {
             event.put("most_possible_time",texts.get(i).getTime_infer().get("most_possible_time"));
             List<String> keywordList = (List)texts.get(i).getSummary().get("keywords");
             event.put("keywords",keywordList);
+            event.put("desc",texts.get(i).getSummary().get("desc"));
+            event.put("location",texts.get(i).getSummary().get("airport"));
             events.add(event);
         }
         resultMap.put("event",events);
@@ -352,7 +355,7 @@ public class TextServiceImpl implements TextService {
                     Aggregation.match(Criteria.where("_id").is(id)),
                     Aggregation.unwind("tweet_list"),
                     Aggregation.sort(Sort.Direction.ASC,"tweet_list.timestamp_ms"),
-                    Aggregation.project("tweet_list.timestamp_ms","tweet_list.text","tweet_list.created_at")
+                    Aggregation.project("tweet_list.timestamp_ms","tweet_list.text","tweet_list.created_at","tweet_list.user")
 
             );
             AggregationResults<JSONObject> results = mongoTemplate.aggregate(agg, "text", JSONObject.class);
@@ -365,11 +368,30 @@ public class TextServiceImpl implements TextService {
             System.out.println(resultss);
             for(int j = 0;j<resultss.size();j++){
                 Map tweet_one = (Map) resultss.get(j);
+                System.out.println(tweet_one);
                 Map map=new HashMap();
                 map.put("_id",id);
                 map.put("timestamp_ms",tweet_one.get("timestamp_ms"));
                 map.put("text",tweet_one.get("text"));
                 map.put("created_at",tweet_one.get("created_at"));
+
+                Map user = (Map) tweet_one.get("user");
+                System.out.println(tweet_one.get("user"));
+                map.put("user_id",user.get("id"));
+                if(tweet_one.get("place")!=null){
+                    map.put("place",tweet_one.get("place"));
+
+                }else{
+                    map.put("place","null");
+                }
+                if(user.get("time_zone")!= null){
+                    map.put("location",user.get("time_zone"));
+                }else{
+                    map.put("location","null");
+                }
+
+
+
                 tweets.add(map);
                 if(j>=9)
                     break;
@@ -544,6 +566,38 @@ public class TextServiceImpl implements TextService {
         System.out.println(""+new Date().getTime());
 
     }
+
+    @Override
+    public Map tweetAnalysis(Map<String, Object> params) {
+        // count
+        Map res = new HashMap();
+        String id=(String)params.get("id");
+        Text text = mongoTemplate.findById(id,Text.class,"text");
+        List<Object> tw = text.getTweet_list();
+
+        if(tw.size()!= 0){
+            Aggregation agg = Aggregation.newAggregation(
+                    Aggregation.match(Criteria.where("_id").is(id)),
+                    Aggregation.unwind("tweet_list"),
+                    Aggregation.sort(Sort.Direction.ASC,"tweet_list.timestamp_ms"),
+                    Aggregation.project("tweet_list.timestamp_ms","tweet_list.text","tweet_list.created_at","tweet_list.user")
+
+            );
+            AggregationResults<JSONObject> results = mongoTemplate.aggregate(agg, "text", JSONObject.class);
+            //System.out.println("results"+results.getRawResults()); //获取到的结果是document
+            //String res = results.getRawResults();
+            String json = com.mongodb.util.JSON.serialize(results.getRawResults());
+            System.out.println("JSON serialized Document: " + json);
+            JSONObject jso= JSON.parseObject(json);
+            JSONArray resultss=jso.getJSONArray("results");
+            System.out.println(resultss);
+            res.put("tweets_num",tw.size());
+        }else{
+            res.put("tweets_num",0);
+        }
+        return res;
+    }
+
     private void creatFiletowenben(String id, String resultss) {
         //创建一个文件，名字就是id；
         String filePath = "/home/hzhao/QB/output/";

@@ -40,4 +40,6 @@ public interface TextService {
     void runPicmodels();
 
     void runEventmodels();
+
+    Map tweetAnalysis(Map<String, Object> params);
 }
