@@ -25,12 +25,14 @@ public class ImageController {
 
     @RequestMapping("/getImage")
     public List<Image> getImage(){
-        return imageService.getImage();
+        //return imageService.getImage();
+        return null;
     }
 
     @RequestMapping("/getImageOutput")
     public List<ImageOutPut> getImageOutput(){
-        return imageService.getImageOutput();
+        //return imageService.getImageOutput();
+        return null;
     }
 
 

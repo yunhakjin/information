@@ -1,39 +1,27 @@
-package com.springboot.information.service.serviceImpl;
+package com.springboot.information.serviceImpl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.gridfs.GridFSBucket;
-import com.mongodb.client.gridfs.GridFSDownloadStream;
-import com.mongodb.client.gridfs.model.GridFSFile;
 import com.springboot.information.entity.Image;
 import com.springboot.information.entity.ImageOutPut;
-import com.springboot.information.entity.Twitter;
 import com.springboot.information.service.ImageService;
-import org.apache.commons.io.IOUtils;
-import org.apache.tomcat.util.json.JSONParser;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by yww on 2019/4/1.
  */
 
-@Component
+//@Component
+@Service
 public class ImageServiceImpl implements ImageService {
 
     @Autowired

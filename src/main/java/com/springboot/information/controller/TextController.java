@@ -95,8 +95,9 @@ public class TextController {
     @ApiOperation(value = "文本模型运行",notes = "运行模型")
     @RequestMapping(value = "/runtwomodels",method = RequestMethod.GET)
     public void runmodels(){
-        textService.runEventmodels();
-        textService.runmodels();
+        /*textService.runEventmodels();
+        textService.runmodels();*/
+        System.out.println("run models....");
     }
 
 

@@ -1,10 +1,5 @@
-package com.springboot.information.service.serviceImpl;
+package com.springboot.information.serviceImpl;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.python.util.PythonInterpreter;
 import com.mongodb.client.gridfs.GridFSBucket;
 //import com.mongodb.util.JSON;
 import com.springboot.information.entity.Text;
@@ -16,7 +11,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import com.springboot.information.utils.StreamGobbler;
 import org.apache.commons.io.IOUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -34,11 +28,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.websocket.Session;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -49,7 +43,8 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwi
 /**
  * Created by yww on 2019/3/29.
  */
-@Component
+//@Component
+@Service
 public class TextServiceImpl implements TextService {
     @Autowired
     private MongoTemplate mongoTemplate;

@@ -1,7 +1,5 @@
-package com.springboot.information.service.serviceImpl;
+package com.springboot.information.serviceImpl;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
 import com.springboot.information.service.GridfsService;
@@ -9,14 +7,14 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.InputStream;
 
 /**
  * Created by yww on 2019/3/29.
  */
-@Component
+//@Component
+@Service
 public class GridfsServiceImpl implements GridfsService{
     @Autowired
     private MongoDbFactory mongodbfactory;
