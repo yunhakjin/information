@@ -97,7 +97,7 @@ public class TextController {
     public void runmodels(){
         /*textService.runEventmodels();
         textService.runmodels();*/
-        System.out.println("run models....");
+        System.out.println("run models success....");
     }
 
 

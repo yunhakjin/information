@@ -269,6 +269,7 @@ public class TextServiceImpl implements TextService {
             event.put("keywords",keywordList);
             event.put("desc",texts.get(i).getSummary().get("desc"));
             event.put("location",texts.get(i).getSummary().get("airport"));
+            event.put("prob",texts.get(i).getSummary().get("prob"));
             events.add(event);
         }
         resultMap.put("event",events);
@@ -306,16 +307,16 @@ public class TextServiceImpl implements TextService {
                 Double down_lat1 = 0.0;
                 for(int m = 0; m<up.size();m++){
                     if(m==0){
-                        up_lat2 = (Double) up.get(m);
+                        up_lat2 = (double) up.get(m);
                     }else{
-                        up_lon2= (Double) up.get(m);
+                        up_lon2= (double) up.get(m);
                     }
                 }
                 for(int n = 0; n<down.size();n++){
                     if(n==0){
-                        down_lat1 = (Double) down.get(n);
+                        down_lat1 = (double) down.get(n);
                     }else{
-                        down_lon1 = (Double) down.get(n);
+                        down_lon1 = (double) down.get(n);
                     }
                 }
                 List<Double> P1 = new ArrayList<>();
@@ -449,7 +450,8 @@ public class TextServiceImpl implements TextService {
     @Override
     public void download(String id, HttpServletRequest request, HttpServletResponse response) {
         //String id=(String)params.get("id");
-        File file = new File("/home/hzhao/IdeaProjects/information/src/main/resources/public/", id + ".txt");
+        //File file = new File("/home/hzhao/IdeaProjects/information/src/main/resources/public/", id + ".txt");
+        File file = new File("./src/main/resources/public/", id + ".txt");
         try(InputStream inputStream =  new FileInputStream(file);
             OutputStream outputStream = response.getOutputStream();){
             response.setContentType("application/x-download");
@@ -464,7 +466,7 @@ public class TextServiceImpl implements TextService {
     @Override
     public void runmodels() {
         //String url="http://59.78.194.14:10010/test";
-        String url="http://127.0.0.1:10010/test";
+        String url="http://59.78.194.115:10010/test";
         String result = "";
         try{
             URL realUrl = new URL(url);
@@ -530,7 +532,7 @@ public class TextServiceImpl implements TextService {
     public void runEventmodels() {
         String shpath = "/home/hzhao/project_bj";
 
-        String url="http://59.78.194.115:10010/test";
+        String url="http://localhost:10010/test";
         String result = "";
         try{
             URL realUrl = new URL(url);
